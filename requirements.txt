@@ -1,0 +1,12 @@
+# Orchestrator dependencies. Platform-agnostic.
+# After install: python -m spacy download en_core_web_sm
+ebooklib
+beautifulsoup4
+lxml
+spacy>=3.8
+wordfreq
+misaki
+num2words
+click
+ftfy
+# Render worker (macOS): mlx-audio  (Kokoro, native Metal GPU)

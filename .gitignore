@@ -1,0 +1,18 @@
+# environments and caches
+.venv/
+__pycache__/
+*.pyc
+
+# generated work and content channels. NEVER publish: chapters.json holds full book
+# text, which is copyrighted for any non-public-domain title.
+work/
+inbox/
+library/
+
+# any book or audio file, anywhere in the tree
+*.epub
+*.m4b
+*.mp3
+*.wav
+*.aac
+*.flac

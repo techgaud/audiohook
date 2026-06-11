@@ -1,0 +1,25 @@
+# Audiohook render pipeline config, shared by the orchestrator and the Mac worker.
+# Voice, quant, and the exact chunk limit get locked by a listening test on the Mac.
+# See build/VERIFICATION.md for the open items.
+
+[model]
+id = "mlx-community/Kokoro-82M-bf16"
+lang_code = "a"               # a American English (see mlx-audio lang codes)
+max_chunk_chars = 500         # proxy for the Kokoro token ceiling, tuned on the Mac
+
+[voice]
+narrator = "am_michael"       # placeholder, pick by listening test on the Mac
+speed = 1.0
+
+[worker]
+url = "http://localhost:8000/v1/audio/speech"
+
+[paths]
+inbox = "../inbox"
+library = "../library"
+work = "../work"
+lexicon = "lexicon/custom.json"
+
+[oov]
+rare_zipf_threshold = 2.5     # wordfreq zipf below this is treated as rare or invented
+min_count = 1                 # report candidate words seen at least this many times
