@@ -27,6 +27,19 @@ Writes `work/<slug>/`:
 Fill IPA for any candidate in the review file, add it to `lexicon/custom.json`
 (word to IPA), and it pronounces correctly on every render.
 
+## Pronunciation review
+
+Names and rare words espeak would mispronounce are listed in `work/<slug>/review.json`
+and `review.md`, ranked names-first. Propose an IPA for the ones worth fixing (set the
+`ipa` field), then confirm by ear:
+
+    python orchestrator/review.py samples <slug>   # renders A/B: proposed vs default
+    # listen in work/<slug>/review_samples/, set "approved": true on the good ones
+    python orchestrator/review.py commit <slug>     # -> lexicon/custom.json, re-render affected chapters
+
+`commit` adds approved entries to the lexicon and clears the audio of only the chapters
+that use them, so the next render redoes just those. The lexicon persists across books.
+
 ## Render (macOS)
 
 The render worker runs natively on macOS so Kokoro gets the Metal GPU (containers
@@ -57,3 +70,4 @@ worker, install the LaunchAgent in `worker/launchd/`.
 | `render_client.py` | send a chunk to the Kokoro worker, get WAV back |
 | `assemble.py` | concat chunk WAVs to chapters, then a chaptered M4B (ffmpeg) |
 | `render.py` | driver: prepared book + lexicon -> library/<slug>.m4b |
+| `review.py` | pronunciation review: sample A/B, confirm by ear, lexiconize |
