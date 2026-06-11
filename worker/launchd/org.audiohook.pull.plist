@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Code-pull poller. Fast-forward-pulls the orchestrator repo on an interval so the Mac
+  always runs the latest code. The Mac is a read-only consumer of code.
+
+  Install:
+    1. Edit the script path, WorkingDirectory, and PATH below.
+    2. cp worker/launchd/org.audiohook.pull.plist ~/Library/LaunchAgents/
+    3. launchctl load ~/Library/LaunchAgents/org.audiohook.pull.plist
+  StartInterval is seconds between pulls.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>org.audiohook.pull</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/ABSOLUTE/PATH/TO/audiohook/build/worker/pull.sh</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/ABSOLUTE/PATH/TO/audiohook/build</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/bin:/bin</string>
+  </dict>
+
+  <key>StartInterval</key><integer>300</integer>
+  <key>RunAtLoad</key><true/>
+
+  <key>StandardOutPath</key><string>/tmp/audiohook-pull.out.log</string>
+  <key>StandardErrorPath</key><string>/tmp/audiohook-pull.err.log</string>
+</dict>
+</plist>

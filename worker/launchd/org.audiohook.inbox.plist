@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Inbox watcher. Runs the pipeline when an EPUB lands in the inbox folder. Pairs with
+  the worker agent (org.audiohook.worker), which must be running.
+
+  Install:
+    1. Edit the WatchPaths entry to your actual inbox folder, the WorkingDirectory and
+       script path to this repo, and PATH to include your Python venv bin.
+    2. cp worker/launchd/org.audiohook.inbox.plist ~/Library/LaunchAgents/
+    3. launchctl load ~/Library/LaunchAgents/org.audiohook.inbox.plist
+  WatchPaths fires the job on any change in the folder; the pipeline itself skips books
+  already rendered, so spurious fires are harmless.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>org.audiohook.inbox</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/ABSOLUTE/PATH/TO/audiohook/build/worker/process_inbox.sh</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/ABSOLUTE/PATH/TO/audiohook/build</string>
+
+  <key>WatchPaths</key>
+  <array>
+    <string>/ABSOLUTE/PATH/TO/inbox</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/ABSOLUTE/PATH/TO/venv/bin:/opt/homebrew/bin:/usr/bin:/bin</string>
+  </dict>
+
+  <key>StandardOutPath</key><string>/tmp/audiohook-inbox.out.log</string>
+  <key>StandardErrorPath</key><string>/tmp/audiohook-inbox.err.log</string>
+</dict>
+</plist>

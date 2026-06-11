@@ -57,6 +57,20 @@ Rendering is resumable (already-rendered chunks are skipped) and produces a chap
 M4B with title, author, and an optional `work/<slug>/cover.jpg`. For an always-on
 worker, install the LaunchAgent in `worker/launchd/`.
 
+## Automation (macOS)
+
+Drop an EPUB in `inbox/`, get an M4B in `library/`:
+
+    python orchestrator/pipeline.py path/to/book.epub   # one book
+    python orchestrator/pipeline.py --inbox             # every unrendered book in inbox/
+
+The pipeline is idempotent (books already in `library/` are skipped). Two LaunchAgents in
+`worker/launchd/` make it hands-off:
+- `org.audiohook.inbox.plist` watches `inbox/` and runs the pipeline on a new EPUB
+- `org.audiohook.pull.plist` fast-forward-pulls this repo on an interval
+
+`inbox/` and `library/` are plain folders. Sync them between machines with your tool of choice.
+
 ## Modules
 
 | module | does |
@@ -71,3 +85,4 @@ worker, install the LaunchAgent in `worker/launchd/`.
 | `assemble.py` | concat chunk WAVs to chapters, then a chaptered M4B (ffmpeg) |
 | `render.py` | driver: prepared book + lexicon -> library/<slug>.m4b |
 | `review.py` | pronunciation review: sample A/B, confirm by ear, lexiconize |
+| `pipeline.py` | full book (prepare + render) and inbox automation |
