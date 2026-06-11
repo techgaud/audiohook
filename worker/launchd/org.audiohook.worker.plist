@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  LaunchAgent for the Kokoro render worker. Keeps mlx_audio.server running natively
+  (Metal GPU) and restarts it on crash or login.
+
+  Install:
+    1. Edit the two ABSOLUTE paths below (WorkingDirectory and the start_worker.sh path)
+       and prepend your Python venv bin to PATH so mlx_audio is found.
+    2. cp worker/launchd/org.audiohook.worker.plist ~/Library/LaunchAgents/
+    3. launchctl load ~/Library/LaunchAgents/org.audiohook.worker.plist
+    4. launchctl start org.audiohook.worker
+  Logs land in /tmp/audiohook-worker.{out,err}.log
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>org.audiohook.worker</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/ABSOLUTE/PATH/TO/audiohook/build/worker/start_worker.sh</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/ABSOLUTE/PATH/TO/audiohook/build</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOST</key><string>127.0.0.1</string>
+    <key>PORT</key><string>8000</string>
+    <!-- prepend your venv bin so mlx_audio.server and python resolve -->
+    <key>PATH</key><string>/ABSOLUTE/PATH/TO/venv/bin:/opt/homebrew/bin:/usr/bin:/bin</string>
+  </dict>
+
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+
+  <key>StandardOutPath</key><string>/tmp/audiohook-worker.out.log</string>
+  <key>StandardErrorPath</key><string>/tmp/audiohook-worker.err.log</string>
+</dict>
+</plist>

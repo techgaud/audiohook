@@ -27,6 +27,23 @@ Writes `work/<slug>/`:
 Fill IPA for any candidate in the review file, add it to `lexicon/custom.json`
 (word to IPA), and it pronounces correctly on every render.
 
+## Render (macOS)
+
+The render worker runs natively on macOS so Kokoro gets the Metal GPU (containers
+cannot reach Metal). Install once:
+
+    brew install ffmpeg espeak-ng
+    pip install mlx-audio misaki num2words
+
+Start the worker, then render a prepared book:
+
+    ./worker/start_worker.sh                     # mlx-audio server on :8000
+    python orchestrator/render.py <slug>         # work/<slug> -> library/<slug>.m4b
+
+Rendering is resumable (already-rendered chunks are skipped) and produces a chaptered
+M4B with title, author, and an optional `work/<slug>/cover.jpg`. For an always-on
+worker, install the LaunchAgent in `worker/launchd/`.
+
 ## Modules
 
 | module | does |
@@ -37,3 +54,6 @@ Fill IPA for any candidate in the review file, add it to `lexicon/custom.json`
 | `oov_scan.py` | pronunciation-review candidates via misaki lexicon, spaCy NER, wordfreq |
 | `lexicon.py` | custom word to IPA, emitted as misaki inline overrides |
 | `prepare.py` | driver: EPUB in, render-ready artifacts out |
+| `render_client.py` | send a chunk to the Kokoro worker, get WAV back |
+| `assemble.py` | concat chunk WAVs to chapters, then a chaptered M4B (ffmpeg) |
+| `render.py` | driver: prepared book + lexicon -> library/<slug>.m4b |

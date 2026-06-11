@@ -15,9 +15,11 @@ speed = 1.0
 url = "http://localhost:8000/v1/audio/speech"
 
 [paths]
-inbox = "../inbox"
-library = "../library"
-work = "../work"
+# Relative to the build/ directory during development. In production these point at
+# the Syncthing content shares (inbox in, library out).
+inbox = "inbox"
+library = "library"
+work = "work"
 lexicon = "lexicon/custom.json"
 
 [oov]
