@@ -71,6 +71,9 @@ The pipeline is idempotent (books already in `library/` are skipped). Two Launch
 
 `inbox/` and `library/` are plain folders. Sync them between machines with your tool of choice.
 
+For a double-click installer `.dmg` that sets all of this up (venv, deps, LaunchAgents), see
+`package/` (`./package/build_dmg.sh`).
+
 ## Modules
 
 | module | does |
