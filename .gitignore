@@ -16,3 +16,11 @@ library/
 *.wav
 *.aac
 *.flac
+
+# Internal knowledge (docs/, CLAUDE.md, CHARTER.md) is versioned centrally in the
+# internal gitea repo techgaud/projects-docs, never in the codebase repos. The
+# files stay on disk (the CLAUDE cascade still resolves), they are only untracked
+# here. Preventive; applies at every depth.
+CLAUDE.md
+CHARTER.md
+docs/
